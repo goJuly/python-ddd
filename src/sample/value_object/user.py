@@ -8,7 +8,12 @@ from typing import ClassVar
 class User:
     """ユーザーの値オブジェクト
 
-    frozen=Trueを実装することにより, 不変であることを表現
+    値オブジェクトは下記の3点を満たす必要がある
+    - 不変
+    - 交換可能
+    - 等価性による比較
+
+    不変であることをfrozen=Trueを実装することで表現
 
     """
 
@@ -16,7 +21,7 @@ class User:
     last_name: str
     MIN_LENGTH: ClassVar[str] = 3
 
-    def __init__(self, first_name: str, last_name: str):
+    def __init__(self, first_name: str, last_name: str) -> None:
         """完全コンストラクタ
 
         値オブジェクトでは生成のタイミングで,
@@ -24,11 +29,11 @@ class User:
         意図しない値を渡された場合,ValueErrorをraiseする.
 
         Args:
-            first_name (str): _description_
-            last_name (str): _description_
+            first_name (str): 名
+            last_name (str): 姓
         """
         if not self._validate_name(first_name):
-            raise ValueError(f"first_name は最小要件を満たしていません{first_name}")
+            raise ValueError(f"first_name は要件を満たしていません{first_name}")
         if not self._validate_name(last_name):
             raise ValueError(f"last_nameは要件を満たしていません{last_name}")
         object.__setattr__(self, "first_name", first_name)
@@ -74,3 +79,13 @@ class User:
             bool: 問題ない場合、True
         """
         return name.isalpha and len(name) > cls.MIN_LENGTH
+
+    def get_full_name_japanese_style(self) -> str:
+        """日本式のフルネームを取得　姓名の順で文字列を取得
+
+        値オブジェクトの振る舞いに関しても、値オブジェクトに定義する。
+
+        Returns:
+            str: フルネーム　姓 名
+        """
+        return self.last_name + " " + self.first_name
