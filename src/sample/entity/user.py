@@ -70,7 +70,10 @@ class User:
             last_name (str): 姓
 
         Raises:
-            ValueError: 渡された引数がクラス生成の要件を満たしていない場合
+            ValueError: first_name が3文字以下の場合
+            ValueError: first_name がアルファベット以外の文字の場合
+            ValueError: last_name が3文字以下の場合
+            ValueError: last_name がアルファベット以外の文字の場合
         """
         self.user_id = user_id
         if not len(first_name) > self.MIN_LENGTH:
@@ -122,4 +125,21 @@ class User:
         """
         return not self.__eq__(__o)
 
-    def 
+    def change_first_name(self, first_name: str):
+        """firstnameの変更
+
+        エンティティは可変なので、アトリビュートの値を変更するメソッドを提供してもよい.
+        例えばECサイトのユーザーは、登録している姓名を変更できるケースがあるので,
+        エンティティが名称変更のメソッドを用意する.
+
+        Args:
+            first_name (str): 変更したいfirst_name
+
+        Raises:
+            ValueError: first_name が3文字以下の場合
+            ValueError: first_name がアルファベット以外の文字の場合
+        """
+        if not len(first_name) > self.MIN_LENGTH:
+            raise ValueError(f"first_name は3文字以上必要です{first_name}")
+        if not self._validate_name(first_name):
+            raise ValueError(f"first_name は要件を満たしていません{first_name}")
